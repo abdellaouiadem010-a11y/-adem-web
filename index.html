@@ -1,0 +1,331 @@
+
+<style>
+#guess-player {
+    background: linear-gradient(145deg,#071c16,#123d2c);
+    color: white;
+    padding: 24px;
+    border-radius: 18px;
+    text-align: center;
+    max-width: 650px;
+    margin: 30px auto;
+    font-family: Arial,sans-serif;
+    box-sizing: border-box;
+}
+#guess-player h2 {
+    color: #f5ce58;
+    font-size: 28px;
+}
+#guess-player .game-info {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 20px 0;
+}
+#guess-player .stat {
+    background: #ffffff15;
+    padding: 12px;
+    border-radius: 10px;
+    min-width: 90px;
+}
+#guess-player .stat strong {
+    display: block;
+    color: #f5ce58;
+    font-size: 21px;
+}
+#guess-player .clue-box {
+    background: #ffffff12;
+    padding: 20px;
+    border-radius: 12px;
+    margin: 18px 0;
+    min-height: 70px;
+}
+#guess-player input {
+    width: 90%;
+    max-width: 350px;
+    padding: 13px;
+    border-radius: 9px;
+    border: 2px solid #f5ce58;
+    font-size: 16px;
+    margin: 10px;
+    box-sizing: border-box;
+}
+#guess-player button {
+    padding: 12px 17px;
+    border: none;
+    border-radius: 9px;
+    margin: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    background: #f5ce58;
+    color: #10251d;
+}
+#guess-player button.secondary {
+    background: #238b57;
+    color: white;
+}
+#guess-player button:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+#guess-player #game-result {
+    font-size: 19px;
+    font-weight: bold;
+    margin: 15px;
+}
+#guess-player #player-reveal {
+    font-size: 25px;
+    color: #f5ce58;
+    margin: 15px;
+}
+#guess-player .progress {
+    background: #ffffff25;
+    height: 9px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+#guess-player #progress-bar {
+    background: #f5ce58;
+    width: 0%;
+    height: 100%;
+    transition: width .3s;
+}
+</style>
+
+<section id="guess-player">
+    <h2>⚽ GUESS THE PLAYER</h2>
+    <p>اختبر معلوماتك الكروية واكتشف هوية الأساطير!</p>
+
+    <div class="game-info">
+        <div class="stat">النقاط<strong id="game-score">0</strong></div>
+        <div class="stat">السؤال<strong id="game-number">1 / 50</strong></div>
+        <div class="stat">الوقت<strong id="game-time">30</strong></div>
+    </div>
+
+    <div class="progress">
+        <div id="progress-bar"></div>
+    </div>
+
+    <p>مستوى الصعوبة</p>
+    <select id="game-level" style="padding:10px;border-radius:8px;">
+        <option value="easy">سهل</option>
+        <option value="medium">متوسط</option>
+        <option value="hard">صعب</option>
+    </select>
+
+    <div class="clue-box">
+        <h3>من أنا؟ 🤔</h3>
+        <p id="player-clue">اضغط على ابدأ اللعب!</p>
+    </div>
+
+    <button id="hint-button" onclick="showHint()">تلميح إضافي 💡</button>
+    <br>
+
+    <input id="player-answer" type="text"
+           placeholder="اكتب اسم اللاعب..."
+           autocomplete="off">
+
+    <br>
+    <button id="answer-button" onclick="checkAnswer()">تحقق من الإجابة</button>
+    <button class="secondary" onclick="startGame()">ابدأ / أعد اللعبة</button>
+
+    <div id="game-result"></div>
+    <div id="player-reveal"></div>
+
+    <button id="next-button" class="secondary"
+            onclick="nextQuestion()" style="display:none;">
+        اللاعب التالي ←
+    </button>
+</section>
+
+<script>
+const footballPlayers = [
+ {name:"messi",clues:["فزت بكأس العالم 2022.","لعبت سنوات طويلة مع برشلونة.","أنا ليونيل من الأرجنتين."]},
+ {name:"ronaldo",clues:["فزت بخمس كرات ذهبية.","لعبت مع ريال مدريد ومانشستر يونايتد.","أنا كريستيانو من البرتغال."]},
+ {name:"pele",clues:["فزت بثلاثة ألقاب لكأس العالم.","أسطورة برازيلية.","لقبي الملك."]},
+ {name:"maradona",clues:["فزت بكأس العالم 1986.","سجلت هدفاً شهيراً بيد الله.","أنا أسطورة أرجنتينية."]},
+ {name:"zidane",clues:["فزت بكأس العالم 1998.","لعبت مع ريال مدريد ويوفنتوس.","أنا زين الدين من فرنسا."]},
+ {name:"maldini",clues:["أسطورة دفاعية.","لعبت طوال مسيرتي تقريباً مع ميلان.","أنا باولو من إيطاليا."]},
+ {name:"ronaldinho",clues:["اشتهرت بابتسامتي ومهاراتي.","لعبت مع برشلونة.","أنا ساحر برازيلي."]},
+ {name:"neymar",clues:["لعبت مع برشلونة وباريس سان جيرمان.","أنا من البرازيل.","ارتديت الرقم 10 مع منتخب بلادي."]},
+ {name:"iniesta",clues:["سجلت هدف الفوز في نهائي كأس العالم 2010.","لعبت مع برشلونة.","أنا أندريس من إسبانيا."]},
+ {name:"xavi",clues:["صانع ألعاب مشهور.","أسطورة وسط برشلونة.","أنا تشافي من إسبانيا."]},
+ {name:"benzema",clues:["فزت بالكرة الذهبية 2022.","لعبت سنوات مع ريال مدريد.","أنا مهاجم فرنسي."]},
+ {name:"modric",clues:["فزت بالكرة الذهبية 2018.","وصلت إلى نهائي كأس العالم 2018.","أنا لوكا من كرواتيا."]},
+ {name:"kaka",clues:["فزت بالكرة الذهبية 2007.","لعبت مع ميلان وريال مدريد.","أنا نجم برازيلي."]},
+ {name:"pirlo",clues:["اشتهرت بتمريراتي الطويلة.","لعبت مع ميلان ويوفنتوس.","أنا أندريا من إيطاليا."]},
+ {name:"totti",clues:["أسطورة نادي روما.","قضيت معظم مسيرتي مع نادٍ واحد.","أنا فرانشيسكو من إيطاليا."]},
+ {name:"buffon",clues:["حارس مرمى إيطالي.","فزت بكأس العالم 2006.","أنا جيانلويجي."]},
+ {name:"casillas",clues:["حارس مرمى إسباني.","فزت بكأس العالم 2010.","لعبت مع ريال مدريد."]},
+ {name:"ramos",clues:["مدافع إسباني مشهور.","سجلت في نهائي دوري الأبطال 2014.","لعبت مع ريال مدريد."]},
+ {name:"puyol",clues:["مدافع وقائد برشلونة.","اشتهرت بشعري الطويل.","أنا كارليس من إسبانيا."]},
+ {name:"roberto carlos",clues:["ظهير أيسر برازيلي.","اشتهرت بتسديداتي القوية.","لعبت مع ريال مدريد."]},
+ {name:"henry",clues:["مهاجم فرنسي.","لعبت مع أرسنال وبرشلونة.","أنا تييري."]},
+ {name:"bergkamp",clues:["أسطورة أرسنال.","مهاجم هولندي.","اشتهرت بلمساتي الفنية."]},
+ {name:"shevchenko",clues:["فزت بالكرة الذهبية 2004.","أسطورة ميلان.","أنا مهاجم أوكراني."]},
+ {name:"drogba",clues:["أسطورة تشيلسي.","سجلت في نهائي دوري الأبطال 2012.","أنا ديدييه من ساحل العاج."]},
+ {name:"lampard",clues:["أسطورة وسط تشيلسي.","سجلت أهدافاً كثيرة رغم أنني لاعب وسط.","أنا فرانك من إنجلترا."]},
+ {name:"gerrard",clues:["قائد ليفربول السابق.","سجلت في نهائي إسطنبول 2005.","أنا ستيفن من إنجلترا."]},
+ {name:"scholes",clues:["أسطورة مانشستر يونايتد.","اشتهرت بتمريراتي وتسديداتي.","أنا بول من إنجلترا."]},
+ {name:"beckham",clues:["اشتهرت بالكرات الثابتة.","لعبت مع مانشستر يونايتد وريال مدريد.","أنا ديفيد من إنجلترا."]},
+ {name:"rooney",clues:["أسطورة مانشستر يونايتد.","كنت مهاجماً إنجليزياً.","أنا واين."]},
+ {name:"van basten",clues:["فزت بثلاث كرات ذهبية.","أسطورة ميلان وهولندا.","أنا ماركو."]},
+ {name:"rivaldo",clues:["فزت بكأس العالم 2002.","فزت بالكرة الذهبية 1999.","أنا نجم برازيلي."]},
+ {name:"romario",clues:["فزت بكأس العالم 1994.","مهاجم برازيلي.","اشتهرت بقدرتي على التسجيل."]},
+ {name:"caf u",clues:["ظهير أيمن برازيلي.","فزت بكأس العالم مرتين.","أنا قائد سابق لمنتخب البرازيل."]},
+ {name:"cantona",clues:["أسطورة مانشستر يونايتد.","مهاجم فرنسي.","اشتهرت بشخصيتي القوية."]},
+ {name:"figo",clues:["فزت بالكرة الذهبية 2000.","لعبت مع برشلونة وريال مدريد.","أنا لويس من البرتغال."]},
+ {name:"eto'o",clues:["مهاجم كاميروني.","فزت بدوري الأبطال مع برشلونة وإنتر.","أنا صامويل."]},
+ {name:"yaya toure",clues:["لاعب وسط من ساحل العاج.","لعبت مع برشلونة ومانشستر سيتي.","أنا يايا."]},
+ {name:"salah",clues:["نجم ليفربول.","أنا من مصر.","ألقب بالملك المصري."]},
+ {name:"haaland",clues:["مهاجم نرويجي.","ألعب مع مانشستر سيتي.","أشتهر بقوتي التهديفية."]},
+ {name:"mbappe",clues:["فزت بكأس العالم 2018.","أنا مهاجم فرنسي.","لعبت مع باريس سان جيرمان وريال مدريد."]},
+ {name:"de bruyne",clues:["صانع ألعاب بلجيكي.","لعبت مع مانشستر سيتي.","أشتهر بتمريراتي الحاسمة."]},
+ {name:"suarez",clues:["مهاجم أوروغوياني.","لعبت مع ليفربول وبرشلونة.","أنا لويس."]},
+ {name:"kane",clues:["مهاجم إنجليزي.","لعبت مع توتنهام وبايرن ميونخ.","أنا هاري."]},
+ {name:"griezmann",clues:["مهاجم فرنسي.","فزت بكأس العالم 2018.","لعبت مع أتلتيكو مدريد."]},
+ {name:"casemiro",clues:["لاعب وسط برازيلي.","لعبت مع ريال مدريد ومانشستر يونايتد.","اشتهرت بدوري الدفاعي."]},
+ {name:"van dijk",clues:["مدافع هولندي.","قائد ليفربول.","أشتهر بقوتي الدفاعية."]},
+ {name:"courtois",clues:["حارس مرمى بلجيكي.","لعبت مع تشيلسي وريال مدريد.","تألقت في نهائي دوري الأبطال 2022."]},
+ {name:"kroos",clues:["لاعب وسط ألماني.","فزت بكأس العالم 2014.","لعبت مع ريال مدريد."]},
+ {name:"foden",clues:["لاعب إنجليزي.","ألعب مع مانشستر سيتي.","أنا فيل."]},
+ {name:"vinicius",clues:["جناح برازيلي.","ألعب مع ريال مدريد.","فزت بدوري الأبطال وسجلت في النهائي."]}
+];
+
+let order = [];
+let current = 0;
+let score = 0;
+let hints = 0;
+let timeLeft = 30;
+let timer = null;
+let answered = false;
+let playing = false;
+
+function normalize(value) {
+    return value.toLowerCase().trim()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g,"")
+        .replace(/[^a-z0-9]/g,"");
+}
+
+function startGame() {
+    clearInterval(timer);
+    order = footballPlayers.map((p,i)=>i);
+
+    const level = document.getElementById("game-level").value;
+    if(level === "hard") order.reverse();
+    if(level === "medium") order.sort(()=>Math.random()-.5);
+
+    current = 0;
+    score = 0;
+    document.getElementById("game-score").textContent = score;
+    playing = true;
+    showQuestion();
+}
+
+function showQuestion() {
+    clearInterval(timer);
+    if(current >= order.length) {
+        finishGame();
+        return;
+    }
+
+    hints = 0;
+    answered = false;
+    timeLeft = 30;
+
+    const player = footballPlayers[order[current]];
+    document.getElementById("player-clue").textContent = player.clues[0];
+    document.getElementById("game-number").textContent = (current+1)+" / "+order.length;
+    document.getElementById("game-time").textContent = timeLeft;
+    document.getElementById("game-result").textContent = "";
+    document.getElementById("player-reveal").textContent = "";
+    document.getElementById("player-answer").value = "";
+    document.getElementById("player-answer").disabled = false;
+    document.getElementById("answer-button").disabled = false;
+    document.getElementById("hint-button").disabled = false;
+    document.getElementById("next-button").style.display = "none";
+    document.getElementById("progress-bar").style.width =
+        (current/order.length*100)+"%";
+
+    timer = setInterval(()=>{
+        timeLeft--;
+        document.getElementById("game-time").textContent = timeLeft;
+        if(timeLeft <= 0) {
+            clearInterval(timer);
+            revealAnswer(false);
+        }
+    },1000);
+}
+
+function showHint() {
+    if(answered || hints >= 2) return;
+    hints++;
+    const player = footballPlayers[order[current]];
+    document.getElementById("player-clue").textContent =
+        player.clues[0] + " " + player.clues[hints];
+    if(hints === 2) {
+        document.getElementById("hint-button").disabled = true;
+    }
+}
+
+function checkAnswer() {
+    if(answered || !playing) return;
+    const answer = normalize(document.getElementById("player-answer").value);
+    if(!answer) {
+        document.getElementById("game-result").textContent =
+            "اكتب اسم اللاعب أولاً!";
+        return;
+    }
+
+    const correct = normalize(footballPlayers[order[current]].name);
+    if(answer === correct) {
+        score += Math.max(10,30-hints*10);
+        document.getElementById("game-score").textContent = score;
+        revealAnswer(true);
+    } else {
+        document.getElementById("game-result").textContent =
+            "ليست الإجابة الصحيحة! حاول مرة أخرى.";
+    }
+}
+
+function revealAnswer(correct) {
+    if(answered) return;
+    answered = true;
+    clearInterval(timer);
+
+    const player = footballPlayers[order[current]];
+    document.getElementById("game-result").textContent =
+        correct ? "إجابة صحيحة! 🏆" : "انتهى الوقت!";
+    document.getElementById("player-reveal").textContent =
+        "اللاعب هو: " + player.name.toUpperCase();
+
+    document.getElementById("player-answer").disabled = true;
+    document.getElementById("answer-button").disabled = true;
+    document.getElementById("hint-button").disabled = true;
+    document.getElementById("next-button").style.display = "inline-block";
+}
+
+function nextQuestion() {
+    if(!answered) return;
+    current++;
+    showQuestion();
+}
+
+function finishGame() {
+    playing = false;
+    clearInterval(timer);
+    document.getElementById("player-clue").textContent =
+        "انتهت جميع الأسئلة!";
+    document.getElementById("game-result").textContent =
+        "أحسنت! نتيجتك النهائية: " + score + " نقطة من 1500";
+    document.getElementById("player-reveal").textContent =
+        "🏆 بطل ADEM FOOTBALL";
+    document.getElementById("next-button").style.display = "none";
+    document.getElementById("progress-bar").style.width = "100%";
+}
+
+document.getElementById("player-answer").addEventListener("keydown",function(e){
+    if(e.key === "Enter") checkAnswer();
+});
+</script>

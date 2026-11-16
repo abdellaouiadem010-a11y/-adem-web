@@ -1,0 +1,315 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADEM FOOTBALL | موسوعة كرة القدم</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #101713;
+    color: white;
+}
+
+header {
+    background: #071d13;
+    padding: 22px;
+    text-align: center;
+    border-bottom: 3px solid #c5a34a;
+}
+
+header h1 {
+    color: #e4c66c;
+    font-size: 30px;
+    margin: 5px;
+}
+
+header p {
+    color: #b9c9bf;
+}
+
+nav {
+    background: #14271d;
+    padding: 15px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 8px;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: #e4c66c;
+}
+
+.hero {
+    padding: 75px 20px;
+    text-align: center;
+    background: linear-gradient(135deg,#174d30,#071d13);
+}
+
+.hero h2 {
+    font-size: 36px;
+    color: #e4c66c;
+}
+
+.hero p {
+    font-size: 18px;
+    line-height: 1.8;
+}
+
+.search {
+    padding: 25px;
+    text-align: center;
+}
+
+input {
+    padding: 14px;
+    width: 85%;
+    max-width: 450px;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+}
+
+section {
+    padding: 35px 20px;
+}
+
+section h2 {
+    color: #e4c66c;
+    border-bottom: 2px solid #b99845;
+    padding-bottom: 12px;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+    gap: 18px;
+}
+
+.card {
+    background: #1b2c22;
+    border: 1px solid #344d3a;
+    padding: 22px;
+    border-radius: 12px;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    border-color: #e4c66c;
+}
+
+.card h3 {
+    color: #e4c66c;
+}
+
+.card p {
+    line-height: 1.8;
+    color: #d2ddd5;
+}
+
+footer {
+    background: #071d13;
+    padding: 25px;
+    text-align: center;
+    color: #c8d4cc;
+    margin-top: 30px;
+}
+
+.hidden {
+    display: none;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>⚽ ADEM FOOTBALL</h1>
+    <p>الموسوعة العالمية لكرة القدم</p>
+</header>
+
+<nav>
+    <a href="#history">التاريخ</a>
+    <a href="#legends">الأساطير</a>
+    <a href="#clubs">الأندية</a>
+    <a href="#competitions">البطولات</a>
+    <a href="#records">الأرقام</a>
+</nav>
+
+<div class="hero">
+    <h2>عالم كرة القدم بين يديك</h2>
+    <p>
+        اكتشف تاريخ اللعبة الأكثر شعبية في العالم،
+        وتعرّف على أعظم اللاعبين والأندية والبطولات.
+    </p>
+</div>
+
+<div class="search">
+    <input type="text" id="search"
+    placeholder="ابحث عن لاعب أو نادٍ أو بطولة..."
+    oninput="searchCards()">
+</div>
+
+<section id="history">
+    <h2>📜 تاريخ كرة القدم</h2>
+    <div class="container">
+        <div class="card">
+            <h3>بداية كرة القدم الحديثة</h3>
+            <p>شهدت إنجلترا سنة 1863 تأسيس الاتحاد الإنجليزي لكرة القدم، وهي محطة أساسية في توحيد قوانين اللعبة الحديثة.</p>
+        </div>
+        <div class="card">
+            <h3>كأس العالم</h3>
+            <p>انطلقت بطولة كأس العالم سنة 1930 في الأوروغواي، وأصبحت أكبر بطولة دولية للمنتخبات.</p>
+        </div>
+        <div class="card">
+            <h3>تطور اللعبة</h3>
+            <p>تطورت كرة القدم عبر العقود من حيث التكتيك والتدريب والتحكيم والتكنولوجيا.</p>
+        </div>
+    </div>
+</section>
+
+<section id="legends">
+    <h2>👑 أساطير كرة القدم</h2>
+    <div class="container">
+        <div class="card">
+            <h3>ليونيل ميسي 🇦🇷</h3>
+            <p>أسطورة أرجنتينية اشتهرت بالمراوغة والتحكم بالكرة وصناعة اللعب والتسجيل.</p>
+        </div>
+        <div class="card">
+            <h3>كريستيانو رونالدو 🇵🇹</h3>
+            <p>نجم برتغالي معروف بقوته البدنية وقدرته التهديفية ونجاحه في عدة دوريات.</p>
+        </div>
+        <div class="card">
+            <h3>بيليه 🇧🇷</h3>
+            <p>أحد أعظم رموز كرة القدم البرازيلية، وفاز بكأس العالم ثلاث مرات.</p>
+        </div>
+        <div class="card">
+            <h3>دييغو مارادونا 🇦🇷</h3>
+            <p>أسطورة أرجنتينية تركت بصمة تاريخية، وقاد منتخب بلاده للفوز بمونديال 1986.</p>
+        </div>
+        <div class="card">
+            <h3>زين الدين زيدان 🇫🇷</h3>
+            <p>لاعب فرنسي سابق اشتهر بمهاراته الفنية وتحكمه في وسط الملعب.</p>
+        </div>
+        <div class="card">
+            <h3>باولو مالديني 🇮🇹</h3>
+            <p>أحد أعظم المدافعين في التاريخ، وأيقونة نادي ميلان الإيطالي.</p>
+        </div>
+        <div class="card">
+            <h3>أندريا بيرلو 🇮🇹</h3>
+            <p>صانع ألعاب مميز اشتهر بالتمريرات الدقيقة والرؤية الاستثنائية.</p>
+        </div>
+        <div class="card">
+            <h3>فرانشيسكو توتي 🇮🇹</h3>
+            <p>أسطورة نادي روما، وعُرف بمهاراته وولائه لناديه.</p>
+        </div>
+    </div>
+</section>
+
+<section id="clubs">
+    <h2>🏆 الأندية العالمية</h2>
+    <div class="container">
+        <div class="card">
+            <h3>ريال مدريد 🇪🇸</h3>
+            <p>نادٍ إسباني عريق، يمتلك تاريخاً حافلاً في البطولات الأوروبية.</p>
+        </div>
+        <div class="card">
+            <h3>برشلونة 🇪🇸</h3>
+            <p>نادٍ إسباني اشتهر بأسلوب الاستحواذ والتمرير واللعب الجماعي.</p>
+        </div>
+        <div class="card">
+            <h3>ميلان 🇮🇹</h3>
+            <p>أحد أشهر الأندية الإيطالية، وصاحب تاريخ أوروبي كبير.</p>
+        </div>
+        <div class="card">
+            <h3>ليفربول 🏴</h3>
+            <p>نادٍ إنجليزي عريق يمتلك جماهيرية كبيرة وتاريخاً أوروبياً مميزاً.</p>
+        </div>
+        <div class="card">
+            <h3>مانشستر يونايتد 🏴</h3>
+            <p>من أشهر أندية إنجلترا، وله تاريخ طويل من النجاحات المحلية والأوروبية.</p>
+        </div>
+        <div class="card">
+            <h3>بايرن ميونخ 🇩🇪</h3>
+            <p>أحد أكبر أندية ألمانيا، ويمتلك سجلاً مميزاً في البطولات.</p>
+        </div>
+    </div>
+</section>
+
+<section id="competitions">
+    <h2>🌍 البطولات الكبرى</h2>
+    <div class="container">
+        <div class="card">
+            <h3>كأس العالم</h3>
+            <p>البطولة الدولية الأبرز، وتجمع المنتخبات الوطنية من مختلف القارات.</p>
+        </div>
+        <div class="card">
+            <h3>دوري أبطال أوروبا</h3>
+            <p>بطولة أوروبية كبرى تتنافس فيها أندية القارة.</p>
+        </div>
+        <div class="card">
+            <h3>كأس أمم إفريقيا</h3>
+            <p>البطولة القارية التي تجمع أفضل المنتخبات الإفريقية.</p>
+        </div>
+        <div class="card">
+            <h3>الدوري الإنجليزي</h3>
+            <p>من أشهر مسابقات الدوريات المحلية في العالم.</p>
+        </div>
+    </div>
+</section>
+
+<section id="records">
+    <h2>📊 معلومات وأرقام تاريخية</h2>
+    <div class="container">
+        <div class="card">
+            <h3>أول كأس عالم</h3>
+            <p>أقيمت سنة 1930 في الأوروغواي.</p>
+        </div>
+        <div class="card">
+            <h3>أكثر منتخب تتويجاً بكأس العالم</h3>
+            <p>البرازيل، بخمسة ألقاب.</p>
+        </div>
+        <div class="card">
+            <h3>ثلاثة ألقاب عالمية</h3>
+            <p>حقق بيليه هذا الإنجاز مع منتخب البرازيل.</p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <h3>ADEM FOOTBALL ⚽</h3>
+    <p>عالم كرة القدم... تاريخ، أساطير، وأمجاد.</p>
+    <p>© 2026 ADEM FOOTBALL</p>
+</footer>
+
+<script>
+function searchCards() {
+    let value = document.getElementById("search").value.toLowerCase();
+    let cards = document.querySelectorAll(".card");
+
+    cards.forEach(card => {
+        card.classList.toggle(
+            "hidden",
+            !card.innerText.toLowerCase().includes(value)
+        );
+    });
+}
+</script>
+
+</body>
+</html>
